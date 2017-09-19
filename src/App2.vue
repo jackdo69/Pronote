@@ -7,18 +7,17 @@
 </template>
 
 <script>
-import Notes from './components/notes/Index'
-import UpdateModal from './components/notes/UpdateModal'
-import CreateNoteForm from './components/notes/Create'
+import journals from './components/journals/Index'
+import UpdateModal from './components/journals/UpdateModal'
 import Alerts from './components/Alerts'
 import EventBus from './components/EventBus'
 import HeaderBar from './components/HeaderBar'
 
 export default {
-  name: 'app',
+  name: 'app2',
   components: {
-    Notes,
-    CreateNoteForm,
+    journals,
+    // CreatejournalForm,
     UpdateModal,
     HeaderBar,
     Alerts
