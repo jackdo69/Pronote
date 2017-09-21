@@ -1,0 +1,26 @@
+  import journals from 'src/components/journals/Index'
+import Auth from '../data/Auth'
+  import UpdateModal from 'src/components/journals/UpdateModal'
+  export default {
+    components: {
+      journals,
+      // CreatejournalForm,
+      UpdateModal
+    },
+    data () {
+      return {
+        selectedjournal: null
+      }
+    },
+    events: {
+      'journal.selected': function (journal) {
+        this.selectedjournal = journal
+      }
+    },
+    created () {
+     if (Auth.getAuth() === null) {
+    	 this.$router.push('/auth')
+    	}
+      }
+  }
+</script>

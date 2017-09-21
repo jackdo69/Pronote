@@ -7,8 +7,10 @@
 </template>
 
 <script>
+// import Notes from './components/notes/Index'
 import journals from './components/journals/Index'
 import UpdateModal from './components/journals/UpdateModal'
+// import CreatejournalForm from './components/journals/Create'
 import Alerts from './components/Alerts'
 import EventBus from './components/EventBus'
 import HeaderBar from './components/HeaderBar'

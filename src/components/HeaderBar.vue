@@ -1,14 +1,43 @@
 <template>
-  <header v-if="user">
-    <input placeholder="Search" v-model="searchQuery" debounce="500">
-    <div>
-      <span>{{user.userTitle}}</span>
-      <img :src="user.imageUrl" :alt="user.userTitle"/>
-      <a href="#" v-on:click.prevent="signOut">
-        <i class="fa fa-sign-out" aria-hidden="true"></i>
-      </a>
-    </div>
-  </header>
+	<div v-if="user">
+	<nav class="navbar navbar-inverse">
+	  <div class="container">
+	  <div class="row">
+		   <div class="col-sm-4">
+		    <ul class="nav navbar-nav">
+		      <li class="active">
+		      <router-link to="/home" class="nav">
+			  	<a style="color: #fff;">Journals</a>
+				</router-link></li>
+		    </ul>
+		    </div>
+	    <div class="col-sm-4">
+		    <div id="search" class="nav navbar-nav navbar-center">
+		      <form class="nav navbar-nav navbar-center" role="search">
+		        <div class="input-group">
+		          <input type="text" class="search form-control input-sm" placeholder="Search" v-model="searchQuery">
+		          <span class="input-group-addon" id="basic-addon2"><span class="glyphicon glyphicon-search"></span></span>
+		        </div>
+		      </form>
+		    </div>
+		  </div>
+	  <div class="col-sm-4">
+		    <div id="navbar" class="navbar-collapse collapse">
+			    <ul class="nav navbar-nav navbar-right">
+			      <li  v-if="user.imageUrl != null"><img style="width: 45px;" class="img-responsive" :src="user.imageUrl" :alt="user.userTitle"/></li>
+			      <li><a href="#">{{user.userTitle}}</a></li>
+			      <li><a href="#" v-on:click.prevent="signOut">
+			      	<i class="fa fa-sign-out" aria-hidden="true">Logout</i>
+			      </a></li>
+			    </ul>
+			  </div>
+	  </div>
+	  </div>
+	  </div>
+	</nav>
+	
+	</div>
+ 
 </template>
 <script>
   import Auth from 'src/data/Auth'
@@ -32,22 +61,51 @@
           return
         }
         this.user = {
-          userTitle: authed.providerData[0].displayName || authed.providerData[0].email || '', // if there's no displayName, take the email, if there's no email, use an empty string
-          imageUrl: authed.providerData[0].photoURL || 'https://www.gravatar.com/avatar/' // Firebase 3 no longer supports auto Gravatar image fetch
+          userTitle: authed.providerData[0].displayName || authed.providerData[0].email || '', // if
+																								// there's
+																								// no
+																								// displayName,
+																								// take
+																								// the
+																								// email,
+																								// if
+																								// there's
+																								// no
+																								// email,
+																								// use
+																								// an
+																								// empty
+																								// string
+          imageUrl: authed.providerData[0].photoURL || 'https://www.gravatar.com/avatar/' // Firebase
+																							// 3 no
+																							// longer
+																							// supports
+																							// auto
+																							// Gravatar
+																							// image
+																							// fetch
         }
       },
       signOut () {
         Auth.signOut()
-        this.$router.push('auth')
+        this.$router.push('/auth')
       }
     },
     created () {
-      Auth.onAuth(this.processUser) // processUser everytime auth state changes (signs in or out)
-      this.processUser(Auth.getAuth()) // processUser in case user is already signed in
+      Auth.onAuth(this.processUser) // processUser everytime auth state changes
+									// (signs in or out)
+      this.processUser(Auth.getAuth()) // processUser in case user is already
+										// signed in
     }
   }
 </script>
 <style>
+.navbar a{
+	color:#fff;
+}
+#search{
+	padding-top:10px;
+}
   header{
     position: fixed;
     left: 0;

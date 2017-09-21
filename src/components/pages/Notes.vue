@@ -1,5 +1,5 @@
 <template>
-  <div>
+<div class="container">
     <create-note-form></create-note-form>
     <notes></notes>
     <update-modal></update-modal>

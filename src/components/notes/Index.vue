@@ -1,8 +1,10 @@
 <template>
+<div class="container">
   <div class="notes" ref="notes">
     <note v-for="note in filteredNotes"
           :note="note">
     </note>
+  </div>
   </div>
 </template>
 <script>
@@ -51,10 +53,11 @@
       noteRepository.on('added', (note) => {
         this.notes.unshift(note)
       })
-      noteRepository.on('changed', ({key, title, content}) => {
+      noteRepository.on('changed', ({key, title, content, created}) => {
         let outdatedNote = noteRepository.find(this.notes, key)
         outdatedNote.title = title
         outdatedNote.content = content
+        outdatedNote.created = created
       })
       noteRepository.on('removed', ({key}) => {
         let noteToRemove = noteRepository.findIndex(this.notes, key)

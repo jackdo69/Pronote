@@ -1,12 +1,13 @@
 <template>
   <div class="note">
-    <h2>{{note.title}}</h2>
+    <h2 class="text-primary"><i class="fa fa-sticky-note" aria-hidden="true">&nbsp;{{note.title}}</i></h2>
+    <div class="text-right text-default">{{note.created}}</div>
     <pre>{{note.content}}</pre>
     <button type="button" v-on:click.stop="remove">
-      <i class="fa fa-trash-o" aria-hidden="true"></i>
+      <i class="fa fa-trash-o text-danger" aria-hidden="true"></i>
     </button>
     <button class="edit" type="button" @click="updateModal">
-      <i class="fa fa-pencil" aria-hidden="true"></i>
+    <i class="fa fa-pencil text-primary" aria-hidden="true"></i>
     </button>
   </div>
 </template>

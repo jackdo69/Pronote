@@ -3,8 +3,6 @@
     <div v-if="journal" class="backdrop" @click.self="dismissModal">
       <form class="edit-journal" v-on:submit.prevent="update" >
         <input name="title" v-model="journal.title" placeholder="Title"/>
-        <textarea name="content" v-model="journal.content" placeholder="Journal description goes here..." rows="8">
-        </textarea>
         <button type="button" v-on:click="remove">
           <i class="fa fa-trash-o" aria-hidden="true"></i>
         </button>
@@ -17,7 +15,7 @@
   import Vue from 'vue'
   import journalRepository from '../../data/JournalRepository'
   import EventBus from '../../components/EventBus'
-
+  import moment from 'moment'
   export default {
     data () {
       return {
@@ -26,6 +24,7 @@
     },
     created () {
       EventBus.$on('journal.selected', (journal) => {
+    	  console.log(journal);
         this.journal = Vue.util.extend({}, journal)
       })
     },
@@ -44,6 +43,7 @@
         })
       },
       update () {
+    	  
         journalRepository.update(this.journal, (err) => {
           if (err) {
             EventBus.$emit('alert', {type: 'error', message: 'Failed to update journal'})

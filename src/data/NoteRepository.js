@@ -3,7 +3,6 @@ import Firebase from 'firebase'
 import Auth from '../data/Auth'
 
 class NoteRepository extends EventEmitter {
-
   constructor () {
     super()
     this.ref = Firebase.database().ref('notes')
@@ -17,20 +16,25 @@ class NoteRepository extends EventEmitter {
   }
 
   get journalid () {
-    var path = window.location.pathname.split('/detail/')
-    return path[1]
+    //return Firebase.database().ref.parent().key();
+    //return this.$route.params.id
+      var path = window.location.pathname.split('/detail/')
+      return path[1] 
   }
 
   get notesRef () {
-    // return Firebase.database().ref(`users/${this.uid}/journals/${this.journalid}/notes`)
-    return Firebase.database().ref('users').child(this.uid).child('journals')
-    .child(this.journalid).child('notes')
+    // return Firebase.database().ref(`users/${this.uid}/notes`)
+    return Firebase.database().ref(`users/${this.uid}/journals/${this.journalid}/notes`)
   }
-  create ({title = '', content = ''}, onComplete) {
-    this.notesRef.push({title, content}, onComplete)
+  
+  getJournalid (){
+      return this.journalid;
   }
-  update ({key, title = '', content = ''}, onComplete) {
-    this.notesRef.child(key).update({title, content}, onComplete) // key is used to find the child, a new note object is made without the key, to prevent key being inserted in Firebase
+  create ({title = '', content = '', created = ''}, onComplete) {
+    this.notesRef.push({title, content, created}, onComplete)
+  }
+  update ({key, title = '', content = '', created = ''}, onComplete) {
+    this.notesRef.child(key).update({title, content, created}, onComplete) // key is used to find the child, a new note object is made without the key, to prevent key being inserted in Firebase
   }
   remove ({key}, onComplete) {
     this.notesRef.child(key).remove(onComplete)

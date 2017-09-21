@@ -1,25 +1,30 @@
 <template>
-  <form class="auth-form" v-on:submit.prevent="wantsToSignUp ? signUpWithPassword() : loginWithPassword()">
+<div class="container">
+<div class="card auth-form mx-auto mt-5">
+  <form v-on:submit.prevent="wantsToSignUp ? signUpWithPassword() : loginWithPassword()">
     <h1>{{wantsToSignUp ? 'Sign up' : 'Sign in'}}</h1>
-    <div>
+    <div class="form-group">
       <label for="email">Email</label>
-      <input type="email" name="email" id="email" placeholder="Email" required v-model="email">
+      <input class="form-control" type="email" name="email" id="email" placeholder="Email" required v-model="email">
     </div>
-    <div>
+    <div class="form-group">
       <label for="password">Password</label>
-      <input type="password" name="password" id="password" required v-model="password">
+      <input class="form-control" type="password" name="password" id="password" required v-model="password">
     </div>
-    <div v-show="wantsToSignUp">
+    <div v-show="wantsToSignUp" class="form-group">
       <label for="confirm-password">Confirm Password</label>
-      <input type="password" name="confirm-password" id="confirm-password" v-model="confirmPassword">
+      <input class="form-control" type="password" name="confirm-password" id="confirm-password" v-model="confirmPassword">
     </div>
-    <div v-show="!wantsToSignUp" class="clearfix btn-group">
-      <button type="submit">Log in</button>
-      <button type="button" v-on:click="wantsToSignUp = true">Sign up</button>
+    <div v-show="!wantsToSignUp" class="form-group text-center">
+      <button type="submit" class="btn btn-success btn-block">Log in</button>
     </div>
-    <div v-show="wantsToSignUp">
-      <button type="submit" class="signup-submit">Sign up</button>
+    <div v-show="wantsToSignUp == true" class="form-group">
+      <button type="submit" class="btn btn-success btn-block signup-submit">Sign up</button>
     </div>
+    <div class="text-center">
+    <a class="d-block small mt-3" v-show="wantsToSignUp !== true" v-on:click="wantsToSignUp = true" href="#">Sign up</a>
+    <a class="d-block small mt-3" v-show="wantsToSignUp == true" v-on:click="wantsToSignUp = false" href="#">Sign in</a>
+  </div>
     <hr>
     <div class="social-providers">
       <a href="#" v-on:click.prevent="signInWithProvider('facebook')"><i class="fa fa-facebook-square" aria-hidden="true"></i></a>
@@ -28,6 +33,8 @@
       <a href="#" v-on:click.prevent="signInWithProvider('github')"><i class="fa fa-github-square" aria-hidden="true"></i></a>
     </div>
   </form>
+  </div>
+  </div>
 </template>
 <script>
   import Auth from '../../data/Auth'
@@ -50,8 +57,18 @@
             password: this.password
           })
             .then((userData) => this.loginWithPassword())                                              // signIn
-            .then(() => EventBus.$emit('alert', {type: 'success', message: 'Signed up successfully'}))  // let user know everything was successful
-            .catch((error) => EventBus.$emit('alert', {type: 'error', message: error.message}))         // tell the user an error occurred
+            .then(() => EventBus.$emit('alert', {type: 'success', message: 'Signed up successfully'}))  // let
+																										// user
+																										// know
+																										// everything
+																										// was
+																										// successful
+            .catch((error) => EventBus.$emit('alert', {type: 'error', message: error.message}))         // tell
+																										// the
+																										// user
+																										// an
+																										// error
+																										// occurred
         }
       },
       loginWithPassword () {
@@ -64,7 +81,12 @@
             this.onSignedIn()
             return userData
           })
-          .catch((error) => EventBus.$emit('alert', {type: 'error', message: error.message})) // tell the user an error occurred
+          .catch((error) => EventBus.$emit('alert', {type: 'error', message: error.message})) // tell
+																								// the
+																								// user
+																								// an
+																								// error
+																								// occurred
       },
       signInWithProvider (provider) {
         Auth.signInWithProvider(provider, (error, authData) => {
@@ -75,10 +97,13 @@
         })
       },
       onSignedIn () {
-        // if (!this.$route.querry) {
-        // }
-        console.log(this)
-        this.$router.push({name: 'home'})
+        var redirect = this.$route.query.redirect;
+    	if(redirect){
+    		this.$router.push(this.$route.query.redirect);
+    	}else{
+    		this.$router.push({name: 'home'})
+    	}
+    	
       }
     }
   }
@@ -99,6 +124,7 @@
   .auth-form > div {
     margin-top: 15px;
   }
+  /*
   .auth-form input {
     height: 32px;
     border: none;
@@ -131,6 +157,7 @@
   .auth-form .signup-submit{
     width: 100%;
   }
+  */
   .auth-form hr{
     margin-top: 20px;
   }

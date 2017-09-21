@@ -20,13 +20,18 @@ class JournalRepository extends EventEmitter {
   }
 
   get journalsRef () {
-    return Firebase.database().ref(`users/${this.uid}/journals`)
+    return Firebase.database().ref('users/'+this.uid+'/journals')
   }
-  create ({title = '', content = ''}, onComplete) {
-    this.journalsRef.push({title, content}, onComplete)
+  
+  getJournalsRef(){
+      return this.journalsRef;
   }
-  update ({key, title = '', content = ''}, onComplete) {
-    this.journalsRef.child(key).update({title, content}, onComplete) // key is used to find the child, a new journal object is made without the key, to prevent key being inserted in Firebase
+  
+  create ({title = '', created = ''}, onComplete) {
+    this.journalsRef.push({title, created}, onComplete)
+  }
+  update ({key, title = '', created = ''}, onComplete) {
+    this.journalsRef.child(key).update({title, created}, onComplete) // key is used to find the child, a new journal object is made without the key, to prevent key being inserted in Firebase
   }
   remove ({key}, onComplete) {
     this.journalsRef.child(key).remove(onComplete)

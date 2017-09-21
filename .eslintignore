@@ -1,2 +1,8 @@
 build/*.js
 config/*.js
+src/data/*.js
+src/*.js
+src/components/*.vue
+src/components/pages/*.vue
+src/components/notes/*.vue
+src/components/journals/*.vue
