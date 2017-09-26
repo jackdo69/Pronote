@@ -10,6 +10,7 @@
     "lint": "eslint --ext .js,.vue src"
   },
   "dependencies": {
+    "eslint-plugin-promise": "^3.3.0",
     "firebase": "^3.6.3",
     "masonry-layout": "^4.1.1",
     "moment": "^2.18.1",

@@ -27,6 +27,7 @@
       },
       updateModal () {
         EventBus.$emit('note.selected', this.note)
+        //alert(this.note.key)
       }
     }
   }
