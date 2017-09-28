@@ -5,6 +5,8 @@
         <input name="title" v-model="note.title" placeholder="Title"/>
         <textarea name="content" v-model="note.content" placeholder="Text goes here..." rows="8">
         </textarea>
+       
+       
         <button type="button" v-on:click="remove">
           <i class="fa fa-trash-o" aria-hidden="true"></i>
         </button>
@@ -21,7 +23,8 @@
   export default {
     data () {
       return {
-        note: null
+        note: null,
+        
       }
     },
     created () {

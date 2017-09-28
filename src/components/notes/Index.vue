@@ -1,10 +1,13 @@
 <template>
 <div class="container">
   <div class="notes" ref="notes">
+
     <note v-for="note in filteredNotes"
           :note="note">
     </note>
+
   </div>
+  <!--{{filteredNotes}}-->
   </div>
 </template>
 <script>
@@ -37,6 +40,7 @@
     computed: {
       filteredNotes () {
         return this.notes.filter((note) => {
+          
           if (this.searchQuery) return (note.title.indexOf(this.searchQuery) !== -1 || note.content.indexOf(this.searchQuery) !== -1) // returns truthy if query is found in title or content
           return true
         })
