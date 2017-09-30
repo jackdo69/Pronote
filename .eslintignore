@@ -1,5 +1,6 @@
 build/*.js
 config/*.js
+src/*.vue
 src/data/*.js
 src/*.js
 src/components/*.vue

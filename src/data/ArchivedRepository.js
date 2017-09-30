@@ -5,7 +5,7 @@ import Auth from '../data/Auth'
 class NoteRepository extends EventEmitter {
   constructor() {
     super()
-    this.ref = Firebase.database().ref('notes')
+    this.ref = Firebase.database().ref('archived')
   }
   get uid() {
     let user = Firebase.auth().currentUser
@@ -15,19 +15,12 @@ class NoteRepository extends EventEmitter {
     return null
   }
 
-  get journalid() {
-    //return Firebase.database().ref.parent().key();
-    //return this.$route.params.id
-    var path = window.location.pathname.split('/detail/')
-    return path[1]
-  }
 
-  get notesRef() {
-    // return Firebase.database().ref(`users/${this.uid}/notes`)
-    return Firebase.database().ref(`users/${this.uid}/journals/${this.journalid}/notes`)
+  get archivedRef() {
+    return Firebase.database().ref(`users/${this.uid}/archived`)
   }
   getNotesRef() {
-    return this.notesRef;
+    return this.archivedRef;
   }
   getJournalid() {
     return this.journalid;
@@ -39,7 +32,7 @@ class NoteRepository extends EventEmitter {
     active = true,
     version = 1
   }, onComplete) {
-    this.notesRef.push({
+    this.archivedRef.push({
       title,
       content,
       created,
@@ -47,41 +40,28 @@ class NoteRepository extends EventEmitter {
       version
     }, onComplete)
   }
-  update({
-    key,
-    title = '',
-    content = '',
-    created = '',
-    active,
-    version
-  }, onComplete) {
-    this.notesRef.child(key).update({
-      title,
-      content,
-      created,
-      active,
-      version
-    }, onComplete) // key is used to find the child, a new note object is made without the key, to prevent key being inserted in Firebase
-  }
+  // update ({key, title = '', content = '', created = '', active, version}, onComplete) {
+  // this.archivedRef.child(key).update({title, content, created, active , version}, onComplete) // key is used to find the child, a new note object is made without the key, to prevent key being inserted in Firebase
+  // }
   remove({
     key
   }, onComplete) {
-    this.notesRef.child(key).remove(onComplete)
+    this.archivedRef.child(key).remove(onComplete)
   }
 
   attachFirebaseListeners() {
     Auth.onAuth((user) => {
       this.emit('userAuth', user)
-      this.notesRef.on('child_added', this.onAdded, this)
-      this.notesRef.on('child_removed', this.onRemoved, this)
-      this.notesRef.on('child_changed', this.onChanged, this)
+      this.archivedRef.on('child_added', this.onAdded, this)
+      this.archivedRef.on('child_removed', this.onRemoved, this)
+      this.archivedRef.on('child_changed', this.onChanged, this)
     })
   }
 
   detachFirebaseListeners() {
-    this.notesRef.off('child_added', this.onAdded, this)
-    this.notesRef.off('child_removed', this.onRemoved, this)
-    this.notesRef.off('child_changed', this.onChanged, this)
+    this.archivedRef.off('child_added', this.onAdded, this)
+    this.archivedRef.off('child_removed', this.onRemoved, this)
+    this.archivedRef.off('child_changed', this.onChanged, this)
   }
   onAdded(snapshot) {
     let note = this.snapshotToNote(snapshot)
@@ -108,12 +88,12 @@ class NoteRepository extends EventEmitter {
     return note
   }
   // Finds the index of the note inside the array by looking for its key
-  findIndex(notes, key) {
-    return notes.findIndex(note => note.key === key)
+  findIndex(archived, key) {
+    return archived.findIndex(note => note.key === key)
   }
   // Finds the note inside the array by looking for its key
-  find(notes, key) {
-    return notes.find(note => note.key === key)
+  find(archived, key) {
+    return archived.find(note => note.key === key)
   }
 }
 export default new NoteRepository() // this instance will be shared across imports
