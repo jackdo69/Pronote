@@ -5,9 +5,11 @@
       <input name="title" v-model="note.title" placeholder="Title" />
       <textarea name="content" v-model="note.content" placeholder="Text goes here..." rows="8">
         </textarea>
-      <input name="version" v-model="note.version" type="hidden" />
-      <input name="created" v-model="created" type="hidden" />
-      <button type="button" v-on:click="remove">
+
+       
+       
+        <button type="button" v-on:click="remove">
+
           <i class="fa fa-trash-o" aria-hidden="true"></i>
         </button>
       <button type="submit">Done</button>
@@ -36,11 +38,18 @@ export default {
     EventBus.$off('note.selected')
   },
 
-  methods: {
-    remove() {
-      noteRepository.remove(this.note, (err) => {
-        alert('error occur')
-        this.dismissModal()
+
+  export default {
+    data () {
+      return {
+        note: null,
+        
+      }
+    },
+    created () {
+      EventBus.$on('note.selected', (note) => {
+        this.note = Vue.util.extend({}, note)
+
       })
     },
     update() {

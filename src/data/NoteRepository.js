@@ -1,7 +1,7 @@
 import EventEmitter from 'events'
 import Firebase from 'firebase'
 import Auth from '../data/Auth'
-
+import moment from 'moment'
 class NoteRepository extends EventEmitter {
   constructor() {
     super()
@@ -18,54 +18,41 @@ class NoteRepository extends EventEmitter {
   get journalid() {
     //return Firebase.database().ref.parent().key();
     //return this.$route.params.id
-    var path = window.location.pathname.split('/detail/')
-    return path[1]
+
+      var path = window.location.pathname.split('/detail/')
+      return path[1]
+
   }
 
   get notesRef() {
     // return Firebase.database().ref(`users/${this.uid}/notes`)
     return Firebase.database().ref(`users/${this.uid}/journals/${this.journalid}/notes`)
   }
-  getNotesRef() {
-    return this.notesRef;
+
+
+  getJournalid (){
+      return this.journalid;
   }
-  getJournalid() {
-    return this.journalid;
+  getNoteid(){
+    //
   }
-  create({
-    title = '',
-    content = '',
-    created = '',
-    active = true,
-    version = 1
-  }, onComplete) {
-    this.notesRef.push({
-      title,
-      content,
-      created,
-      active,
-      version
-    }, onComplete)
+  create ({title = '', content = '', created = ''}, onComplete) {
+    let note = this.notesRef.push({created}, onComplete)
+    //alert(note.key)
+    Firebase.database().ref(`users/${this.uid}/journals/${this.journalid}/notes/${note.key}/notesrecords`).push({title, content, created}, onComplete)
+
   }
-  update({
-    key,
-    title = '',
-    content = '',
-    created = '',
-    active,
-    version
-  }, onComplete) {
-    this.notesRef.child(key).update({
-      title,
-      content,
-      created,
-      active,
-      version
-    }, onComplete) // key is used to find the child, a new note object is made without the key, to prevent key being inserted in Firebase
+  update ({key, title = '', content = '', created = ''}, onComplete) {
+    //this.notesRef.child(key).update({title, content, created}, onComplete) // key is used to find the child, a new note object is made without the key, to prevent key being inserted in Firebase
+    //this.notesRef.push({title, content, created}, onComplete) //history
+    //alert(key)
+    created = moment().format('MM/DD/YYYY hh:mm')
+    Firebase.database().ref(`users/${this.uid}/journals/${this.journalid}/notes/${key}/notesrecords`).push({title, content, created}, onComplete)
+    //this.notesRecordRef.push({title, content, created}, onComplete)
+
   }
-  remove({
-    key
-  }, onComplete) {
+  remove ({key}, onComplete) {
+
     this.notesRef.child(key).remove(onComplete)
   }
 
@@ -105,6 +92,21 @@ class NoteRepository extends EventEmitter {
     let key = snapshot.key
     let note = snapshot.val()
     note.key = key
+    
+    var aa = this.notesRef.child(key+"/notesrecords").orderByKey();
+
+    aa.on('child_added', function(bbb) {
+      //alert(bbb.val().title)
+      note.title = bbb.val().title //显示标题，todo 显示内容
+      note.created = bbb.val().created
+      note.content = bbb.val().content
+      
+
+    });
+  
+  
+    //note.title = snapshot.child("notesrecords/").val()
+    //alert(snapshot.val())
     return note
   }
   // Finds the index of the note inside the array by looking for its key
@@ -114,6 +116,10 @@ class NoteRepository extends EventEmitter {
   // Finds the note inside the array by looking for its key
   find(notes, key) {
     return notes.find(note => note.key === key)
+
+    //return notes.find(note => notesrecord => notesrecords.key ==key)
+
+
   }
 }
 export default new NoteRepository() // this instance will be shared across imports

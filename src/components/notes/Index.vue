@@ -1,35 +1,52 @@
 <template>
 <div class="container">
   <div class="notes" ref="notes">
-    <note v-for="note in filteredNotes" :note="note">
+
+
+    <note v-for="note in filteredNotes"
+          :note="note">
+
     </note>
+
   </div>
-</div>
+
+  <!--{{filteredNotes}}-->
+  </div>
 </template>
 <script>
-import noteRepository from '../../data/NoteRepository'
-import Masonry from 'masonry-layout'
-import EventBus from '../../components/EventBus'
-import Note from './Note'
-import moment from 'moment'
-export default {
-  components: {
-    Note
-  },
-  data() {
-    return {
-      notes: [],
-      searchQuery: '',
-      dateRange: '',
-      created: moment().format('MM/DD/YYYY hh:mm')
-    }
-  },
-  watch: {
-    'filteredNotes': {
-      handler() {
-        this.$nextTick(() => {
-          this.masonry.reloadItems()
-          this.masonry.layout()
+  import noteRepository from '../../data/NoteRepository'
+  import Masonry from 'masonry-layout'
+  import EventBus from '../../components/EventBus'
+  import Note from './Note'
+
+  export default {
+    components: {
+      Note
+    },
+    data () {
+      return {
+        notes: [],
+        searchQuery: ''
+      }
+    },
+    watch: {
+      'filteredNotes': {
+        handler () {
+          this.$nextTick(() => {
+            this.masonry.reloadItems()
+            this.masonry.layout()
+          })
+        }
+      },
+      deep: true
+    },
+    computed: {
+      filteredNotes () {
+        return this.notes.filter((note) => {
+          
+          if (this.searchQuery) return (note.title.indexOf(this.searchQuery) !== -1 || note.content.indexOf(this.searchQuery) !== -1) // returns truthy if query is found in title or content
+          return true
+
         })
       }
     },

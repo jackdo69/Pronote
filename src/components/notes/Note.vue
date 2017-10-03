@@ -17,23 +17,22 @@ import noteRepository from '../../data/NoteRepository'
 import archivedRepository from '../../data/ArchivedRepository'
 import EventBus from '../EventBus'
 
-export default {
-  props: ['note'],
-  methods: {
-    moveArchive() {
-      //console.log("journal_title:" + this.$els.journal_title);
-      archivedRepository.create(this.note, (err) => {
-        alert('error occur')
-      })
 
-      noteRepository.remove(this.note, (err) => {
-        alert('error occur')
-      })
-    },
-    updateModal() {
-      console.log("updateModal");
-      console.log(this.note);
-      EventBus.$emit('note.selected', this.note)
+  export default {
+    props: ['note'],
+    methods: {
+      remove () {
+        noteRepository.remove(this.note, (err) => {
+          if (err) {
+            EventBus.$emit('alert', {type: 'error', message: err.message})
+          }
+        })
+      },
+      updateModal () {
+        EventBus.$emit('note.selected', this.note)
+        //alert(this.note.key)
+      }
+
     }
   }
 }
