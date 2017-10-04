@@ -23,6 +23,7 @@ import noteRepository from '../../data/NoteRepository'
 import archivedNoteRepository from '../../data/ArchivedNoteRepository'
 import EventBus from '../EventBus'
 
+<<<<<<< HEAD
 export default {
   props: ['note'],
   methods: {
@@ -63,6 +64,24 @@ export default {
           oldnote.hide = false;
           noteRepository.update(oldnote, (err) => {})
         });
+=======
+
+  export default {
+    props: ['note'],
+    methods: {
+      remove () {
+        noteRepository.remove(this.note, (err) => {
+          if (err) {
+            EventBus.$emit('alert', {type: 'error', message: err.message})
+          }
+        })
+      },
+      updateModal () {
+        EventBus.$emit('note.selected', this.note)
+        //alert(this.note.key)
+      }
+
+>>>>>>> a775eefbd9c7e8e5300a96725a3a671ffe9d9415
     }
   }
 }
