@@ -1,33 +1,33 @@
 <template>
-<form class="create-journal" v-on:submit.prevent="createJournal()">
-  <input name="title" v-model="title" placeholder="Title" />
-  <textarea name="content" v-model="content" placeholder="Text goes here..." rows="3">
-    </textarea>
-  <button type="submit">+</button>
-</form>
+  <form class="create-journal" v-on:submit.prevent="createjournal()">
+    <input name="title" v-model="title" placeholder="Journal Name" />
+    <button type="submit">+</button>
+  </form>
 </template>
 <script>
-import journalRepository from '../../data/JournalRepository'
+import JournalRepository from '../../data/JournalRepository'
 import EventBus from '../../components/EventBus'
+import moment from 'moment'
 
 export default {
   data() {
     return {
       title: '',
-      content: ''
+      created: moment().format('MM/DD/YYYY hh:mm')
     }
   },
   methods: {
-    createJournal() {
-      if (this.title.trim() || this.content.trim()) {
-        journalRepository.create({
+    createjournal() {
+      console.log("createjournal");
+      if (this.title.trim()) {
+        JournalRepository.create({
           title: this.title,
-          content: this.content
+          created: this.created
         }, (err) => {
           alert('woops some errors occur')
-          this.title = ''
-          this.content = ''
-          alert('journal created successfully')
+          this.title = '';
+          this.created = moment().format('MM/DD/YYYY hh:mm');
+          alert('Journal created successfully')
         })
       }
     }

@@ -44,26 +44,19 @@ export default {
       })
     },
     update() {
-      console.log("note update....");
-      console.log(this.note.key);
       var notesRef = noteRepository.getNotesRef();
       notesRef.child(this.note.key).once('value')
         .then((snapshot) => {
           var oldnote = snapshot.val();
-          console.log("before update old note:");
-          console.log(oldnote);
           oldnote.key = this.note.key;
           oldnote.active = false;
-          console.log("after update old note:");
-          console.log(oldnote);
           noteRepository.update(oldnote, (err) => {
-            alert('error occur')
           })
-          console.log("new note ....");
           noteRepository.create({
             title: this.note.title,
             content: this.note.content,
             created: this.created,
+            hide: this.hide,
             active: this.note.active,
             version: oldnote.version + 1
           }, (err) => {

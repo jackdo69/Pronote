@@ -26,7 +26,7 @@ export default {
   },
   created() {
     EventBus.$on('journal.selected', (journal) => {
-      console.log(journal);
+      console.log(journal.key);
       this.journal = Vue.util.extend({}, journal)
     })
   },
@@ -42,9 +42,7 @@ export default {
       })
     },
     update() {
-
       journalRepository.update(this.journal, (err) => {
-        alert('some errors occur')
         this.dismissModal()
       })
     },

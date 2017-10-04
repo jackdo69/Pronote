@@ -7,9 +7,12 @@
     <div class="col-sm-4"><img src="../../assets/note.png" class="img-responsive" /></div>
     <div class="col-sm-8 no-padding">
       <pre>Created: {{journal.created}}</pre>
-      <button type="button" v-on:click.stop="remove(journal)">
+      <!-- <button type="button" v-on:click.stop="remove(journal)">
 		      <i class="fa fa-trash-o text-danger" aria-hidden="true"></i>
-		    </button>
+		    </button> -->
+        <button type="button" v-on:click.stop="moveArchive(journal)">
+            <i class="fa fa-archive text-danger" aria-hidden="true"></i>
+          </button>
       <button class="edit" type="button" @click="updateModal(journal)">
 		      <i class="fa fa-pencil text-primary" aria-hidden="true"></i>
 		    </button>
@@ -18,24 +21,27 @@
 </div>
 </template>
 <script>
+import archivedNoteRepository from '../../data/ArchivedNoteRepository'
+import noteRepository from '../../data/NoteRepository'
 import journalRepository from '../../data/JournalRepository'
 import EventBus from '../EventBus'
 import moment from 'moment'
 export default {
   props: ['journal'],
   methods: {
+    moveArchive(j) {
+      EventBus.$emit('journal.archive',j)
+    remove(j)
+  },
     remove(j) {
       journalRepository.remove(j, (err) => {
-        alert('some errors occur')
       })
     },
     updateModal(j) {
       EventBus.$emit('journal.selected', j)
+      console.log(j.title)
     },
     viewDetail: function(journal) {
-      console.log("viewDetail-journal:");
-      console.log(journal);
-      console.log(journal.key);
       this.$router.push({
         name: '/detail/:id',
         params: {

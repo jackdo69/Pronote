@@ -98,13 +98,5 @@ export default {
   margin-top: 20px;
 }
 
-.auth-form .social-providers {
-  text-align: center;
-}
 
-.auth-form .social-providers a {
-  color: #41b883;
-  font-size: 36px;
-  padding: 4px;
-}
 </style>

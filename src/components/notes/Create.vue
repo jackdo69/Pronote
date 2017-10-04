@@ -24,6 +24,7 @@ export default {
       title: '',
       content: '',
       created: moment().format('MM/DD/YYYY hh:mm'),
+      hide: false,
       active: true,
       version: 1,
       journal_title: ''
@@ -32,7 +33,7 @@ export default {
   created() {
     this.created = moment().format('MM/DD/YYYY hh:mm');
     const id = noteRepository.getJournalid();
-    var journalsRef = journalRepository.getJournalsRef();
+    var journalsRef = journalRepository.journalsRef
     journalsRef.child(id)
       .once('value')
       .then((snapshot) => {
@@ -47,13 +48,14 @@ export default {
           title: this.title,
           content: this.content,
           created: this.created,
+          hide: this.hide,
           active: this.active,
           version: this.version
         }, (err) => {
-          alert('woops some errors occur')
           this.title = '';
           this.content = '';
           this.created = moment().format('MM/DD/YYYY hh:mm');
+          this.hide = false;
           this.active = true;
           this.version = 1;
           alert('Note created successfully')

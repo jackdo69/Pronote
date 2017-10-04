@@ -1,9 +1,5 @@
 <template>
 <div>
-  <form class="create-journal" v-on:submit.prevent="createjournal()">
-    <input name="title" v-model="title" placeholder="Journal Name" />
-    <button type="submit">+</button>
-  </form>
   <div class="journals" ref="journals">
     <journal v-for="journal in filteredjournals" :journal="journal">
     </journal>
@@ -64,29 +60,13 @@ export default {
     }
   },
   methods: {
-    createjournal() {
-      console.log("createjournal");
-      if (this.title.trim()) {
-        JournalRepository.create({
-          title: this.title,
-          created: this.created
-        }, (err) => {
-          alert('woops some errors occur')
-          this.title = '';
-          this.created = moment().format('MM/DD/YYYY hh:mm');
-          alert('Journal created successfully')
-        })
-      }
-    }
-
   },
   created() {
     console.log("created journal");
-    //this.$bindAsArray('journals', JournalRepository.ref);
   },
   mounted() {
     JournalRepository.on('added', (journal) => {
-      // console.log("added");
+      console.log("added");
       this.journals.unshift(journal)
     })
     JournalRepository.on('changed', ({

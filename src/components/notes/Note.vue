@@ -7,6 +7,12 @@
   <button type="button" v-on:click.stop="moveArchive">
       <i class="fa fa-archive text-danger" aria-hidden="true"></i>
     </button>
+    <button type="button" v-if="note.hide != true" v-on:click.stop="hide">
+        <i class="fa fa-eye-slash" aria-hidden="true"></i>
+      </button>
+      <button type="button" v-if="note.hide == true" v-on:click.stop="unhide">
+          <i class="fa fa-eye" aria-hidden="true"></i>
+        </button>
   <button class="edit" type="button" @click="updateModal">
     <i class="fa fa-pencil text-primary" aria-hidden="true"></i>
     </button>
@@ -14,15 +20,14 @@
 </template>
 <script>
 import noteRepository from '../../data/NoteRepository'
-import archivedRepository from '../../data/ArchivedRepository'
+import archivedNoteRepository from '../../data/ArchivedNoteRepository'
 import EventBus from '../EventBus'
 
 export default {
   props: ['note'],
   methods: {
     moveArchive() {
-      //console.log("journal_title:" + this.$els.journal_title);
-      archivedRepository.create(this.note, (err) => {
+      archivedNoteRepository.create(this.note, (err) => {
         alert('error occur')
       })
 
@@ -34,6 +39,30 @@ export default {
       console.log("updateModal");
       console.log(this.note);
       EventBus.$emit('note.selected', this.note)
+    },
+
+    hide() {
+      console.log('hide')
+      var notesRef = noteRepository.getNotesRef();
+      notesRef.child(this.note.key).once('value')
+        .then((snapshot) => {
+          var oldnote = snapshot.val();
+          oldnote.key = this.note.key;
+          oldnote.hide = true;
+          noteRepository.update(oldnote, (err) => {})
+        });
+    },
+
+    unhide() {
+      console.log('unhide' + this.note.key)
+      var notesRef = noteRepository.getNotesRef();
+      notesRef.child(this.note.key).once('value')
+        .then((snapshot) => {
+          var oldnote = snapshot.val();
+          oldnote.key = this.note.key;
+          oldnote.hide = false;
+          noteRepository.update(oldnote, (err) => {})
+        });
     }
   }
 }

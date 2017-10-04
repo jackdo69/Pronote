@@ -1,7 +1,13 @@
 <template>
 <div class="container">
+  <button type="button" class="btn btn-danger" v-show="show_hidden==false" v-on:click="show_hidden=true">Show hidden entries</button>
+  <button type="button" class="btn btn-success" v-show="show_hidden==true" v-on:click="show_hidden=false">Show unhidden entries</button>
   <div class="notes" ref="notes">
-    <note v-for="note in filteredNotes" :note="note">
+    <note v-for="note in filteredNotes" v-show="show_hidden==false" v-if="note.hide != true" :note="note">
+    </note>
+  </div>
+  <div class="notes" ref="notes">
+    <note v-for="note in filteredNotes" v-show="show_hidden==true" v-if="note.hide ==true" :note="note">
     </note>
   </div>
 </div>
@@ -19,6 +25,7 @@ export default {
   data() {
     return {
       notes: [],
+      show_hidden: false,
       searchQuery: '',
       dateRange: '',
       created: moment().format('MM/DD/YYYY hh:mm')
@@ -80,6 +87,7 @@ export default {
       console.log("note added");
       this.notes.unshift(note)
     })
+    //Auto update the note added
     noteRepository.on('changed', ({
       key,
       title,
@@ -94,17 +102,25 @@ export default {
       console.log("remove old note");
       this.notes.splice(outdatedNote, 1)
     })
+    //Auto update any change done to the note
     noteRepository.on('removed', ({
       key
     }) => {
       let noteToRemove = noteRepository.findIndex(this.notes, key)
       this.notes.splice(noteToRemove, 1)
     })
+    //Auto update any note that been removed
     EventBus.$on('search', (searchQuery, dateRange) => {
       this.searchQuery = searchQuery;
       this.dateRange = dateRange;
     })
     noteRepository.attachFirebaseListeners()
+  },
+  updated() {
+    this.$nextTick(() => {
+      this.masonry.reloadItems()
+      this.masonry.layout()
+    })
   },
   destroyed() {
     noteRepository.detachFirebaseListeners()

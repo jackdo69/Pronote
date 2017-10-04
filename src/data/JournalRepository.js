@@ -15,17 +15,11 @@ class JournalRepository extends EventEmitter {
     return null
   }
 
-  get journalid() {
-    return this.key
-  }
 
   get journalsRef() {
     return Firebase.database().ref('users/' + this.uid + '/journals')
   }
 
-  getJournalsRef() {
-    return this.journalsRef;
-  }
 
   create({
     title = '',
@@ -67,8 +61,6 @@ class JournalRepository extends EventEmitter {
   }
   onAdded(snapshot) {
     let journal = this.snapshotTojournal(snapshot)
-    // propagate event outwards with journal
-    // console.log("onAdded");
     this.emit('added', journal)
   }
   onRemoved(oldSnapshot) {
@@ -84,7 +76,6 @@ class JournalRepository extends EventEmitter {
   }
   // processes the snapshots to consistent journal with key
   snapshotTojournal(snapshot) {
-    // we will need the key often, so we always want to have the key included in the journal
     let key = snapshot.key
     let journal = snapshot.val()
     journal.key = key

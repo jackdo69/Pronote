@@ -60,14 +60,6 @@ export default {
       range: true
     }
   },
-  watch: {
-    //'searchQuery': function () {
-    //  EventBus.$emit('search', this.searchQuery)
-    //},
-    //'date': function () {
-    //  EventBus.$emit('searchDate', this.date)
-    //},
-  },
   methods: {
     search() {
       EventBus.$emit('search', this.searchQuery, this.date);
