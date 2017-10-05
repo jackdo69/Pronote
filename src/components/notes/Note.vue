@@ -14,7 +14,6 @@
 <script>
   import noteRepository from '../../data/NoteRepository'
   import EventBus from '../EventBus'
-
   export default {
     props: ['note'],
     methods: {

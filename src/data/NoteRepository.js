@@ -1,7 +1,7 @@
 import EventEmitter from 'events'
 import Firebase from 'firebase'
 import Auth from '../data/Auth'
-
+import moment from 'moment'
 class NoteRepository extends EventEmitter {
   constructor () {
     super()
@@ -43,6 +43,7 @@ class NoteRepository extends EventEmitter {
     //this.notesRef.child(key).update({title, content, created}, onComplete) // key is used to find the child, a new note object is made without the key, to prevent key being inserted in Firebase
     //this.notesRef.push({title, content, created}, onComplete) //history
     //alert(key)
+    created = moment().format('MM/DD/YYYY hh:mm')
     Firebase.database().ref(`users/${this.uid}/journals/${this.journalid}/notes/${key}/notesrecords`).push({title, content, created}, onComplete)
     //this.notesRecordRef.push({title, content, created}, onComplete)
 
@@ -86,6 +87,21 @@ class NoteRepository extends EventEmitter {
     let key = snapshot.key
     let note = snapshot.val()
     note.key = key
+    
+    var aa = this.notesRef.child(key+"/notesrecords").orderByKey();
+
+    aa.on('child_added', function(bbb) {
+      //alert(bbb.val().title)
+      note.title = bbb.val().title //显示标题，todo 显示内容
+      note.created = bbb.val().created
+      note.content = bbb.val().content
+      
+
+    });
+  
+  
+    //note.title = snapshot.child("notesrecords/").val()
+    //alert(snapshot.val())
     return note
   }
   // Finds the index of the note inside the array by looking for its key

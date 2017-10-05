@@ -5,6 +5,8 @@
         <input name="title" v-model="note.title" placeholder="Title"/>
         <textarea name="content" v-model="note.content" placeholder="Text goes here..." rows="8">
         </textarea>
+       
+       
         <button type="button" v-on:click="remove">
           <i class="fa fa-trash-o" aria-hidden="true"></i>
         </button>
@@ -17,11 +19,11 @@
   import Vue from 'vue'
   import noteRepository from '../../data/NoteRepository'
   import EventBus from '../../components/EventBus'
-
   export default {
     data () {
       return {
-        note: null
+        note: null,
+        
       }
     },
     created () {
@@ -32,7 +34,6 @@
     beforeDestroy () {
       EventBus.$off('note.selected')
     },
-
     methods: {
       remove () {
         noteRepository.remove(this.note, (err) => {
@@ -114,7 +115,6 @@
   form.edit-note button:hover, form.edit-note button:focus{
     opacity: 1;
   }
-
   /* modal transition */
   .modal-transition{
     transition: opacity .3s ease;
@@ -126,7 +126,6 @@
   .modal-enter, .modal-leave {
     opacity: 0;
   }
-
   .modal-enter form,
   .modal-leave form {
     -webkit-transform: scale(1.1);
