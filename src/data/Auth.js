@@ -11,19 +11,19 @@ export default {
   },
   // user: null,
   ref: Firebase.auth(),
-  onAuth(authCallback) {
+  onAuth (authCallback) {
     this.ref.onAuthStateChanged(authCallback)
   },
-  getAuth() {
+  getAuth () {
     return this.ref.currentUser
   },
-  loginWithPassword(credentials) {
+  loginWithPassword (credentials) {
     return this.ref.signInWithEmailAndPassword(credentials.email, credentials.password)
   },
-  signUpWithPassword(credentials) {
+  signUpWithPassword (credentials) {
     return this.ref.createUserWithEmailAndPassword(credentials.email, credentials.password)
   },
-  signInWithProvider(providerName, callback) {
+  signInWithProvider (providerName, callback) {
     let provider = this.providers[providerName]
     this.ref.signInWithPopup(provider).then((result) => {
       if (callback) {
@@ -33,7 +33,7 @@ export default {
       callback(error)
     })
   },
-  signOut() {
+  signOut () {
     this.ref.signOut()
   }
 }

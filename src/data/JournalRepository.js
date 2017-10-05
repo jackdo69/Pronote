@@ -3,11 +3,11 @@ import Firebase from 'firebase'
 import Auth from '../data/Auth'
 
 class JournalRepository extends EventEmitter {
-  constructor() {
+  constructor () {
     super()
     this.ref = Firebase.database().ref('journals')
   }
-  get uid() {
+  get uid () {
     let user = Firebase.auth().currentUser
     if (user) {
       return user.uid
@@ -15,43 +15,28 @@ class JournalRepository extends EventEmitter {
     return null
   }
 
-  get journalid() {
+  get journalid () {
     return this.key
   }
 
-  get journalsRef() {
-    return Firebase.database().ref('users/' + this.uid + '/journals')
+  get journalsRef () {
+    return Firebase.database().ref('users/'+this.uid+'/journals')
   }
-
-  getJournalsRef() {
-    return this.journalsRef;
+  
+  getJournalsRef(){
+      return this.journalsRef;
   }
-
-  create({
-    title = '',
-    created = ''
-  }, onComplete) {
-    this.journalsRef.push({
-      title,
-      created
-    }, onComplete)
+  
+  create ({title = '', created = ''}, onComplete) {
+    this.journalsRef.push({title, created}, onComplete)
   }
-  update({
-    key,
-    title = '',
-    created = ''
-  }, onComplete) {
-    this.journalsRef.child(key).update({
-      title,
-      created
-    }, onComplete) // key is used to find the child, a new journal object is made without the key, to prevent key being inserted in Firebase
+  update ({key, title = '', created = ''}, onComplete) {
+    this.journalsRef.child(key).update({title, created}, onComplete) // key is used to find the child, a new journal object is made without the key, to prevent key being inserted in Firebase
   }
-  remove({
-    key
-  }, onComplete) {
+  remove ({key}, onComplete) {
     this.journalsRef.child(key).remove(onComplete)
   }
-  attachFirebaseListeners() {
+  attachFirebaseListeners () {
     Auth.onAuth((user) => {
       this.emit('userAuth', user)
       this.journalsRef.on('child_added', this.onAdded, this)
@@ -60,30 +45,29 @@ class JournalRepository extends EventEmitter {
     })
   }
 
-  detachFirebaseListeners() {
+  detachFirebaseListeners () {
     this.journalsRef.off('child_added', this.onAdded, this)
     this.journalsRef.off('child_removed', this.onRemoved, this)
     this.journalsRef.off('child_changed', this.onChanged, this)
   }
-  onAdded(snapshot) {
+  onAdded (snapshot) {
     let journal = this.snapshotTojournal(snapshot)
     // propagate event outwards with journal
-    // console.log("onAdded");
     this.emit('added', journal)
   }
-  onRemoved(oldSnapshot) {
+  onRemoved (oldSnapshot) {
     let journal = this.snapshotTojournal(oldSnapshot)
     this.emit('removed', journal)
   }
-  onChanged(snapshot) {
+  onChanged (snapshot) {
     let journal = this.snapshotTojournal(snapshot)
     this.emit('changed', journal)
   }
-  onError(err) {
+  onError (err) {
     console.log(err)
   }
   // processes the snapshots to consistent journal with key
-  snapshotTojournal(snapshot) {
+  snapshotTojournal (snapshot) {
     // we will need the key often, so we always want to have the key included in the journal
     let key = snapshot.key
     let journal = snapshot.val()
@@ -91,11 +75,11 @@ class JournalRepository extends EventEmitter {
     return journal
   }
   // Finds the index of the journal inside the array by looking for its key
-  findIndex(journals, key) {
+  findIndex (journals, key) {
     return journals.findIndex(journal => journal.key === key)
   }
   // Finds the journal inside the array by looking for its key
-  find(journals, key) {
+  find (journals, key) {
     return journals.find(journal => journal.key === key)
   }
 }
