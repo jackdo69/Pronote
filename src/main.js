@@ -6,6 +6,7 @@ import VueFire from 'vuefire'
 import AuthPage from './components/pages/Auth'
 import JournalsPage from './components/pages/Journals'
 import JournalDetailsPage from './components/pages/JournalDetails'
+import NoteHistoryPage from './components/notes/NoteHistory'
 import ArchivedPage from './components/pages/ArchivedPage'
 import * as firebase from "firebase";
 Vue.use(VueRouter)
@@ -24,6 +25,14 @@ const router = new VueRouter({
       name: '/detail/:id',
       path: '/detail/:id',
       component: JournalDetailsPage,
+      meta: {
+        requiresAuth: true
+      }
+    },
+    {
+      name: '/detail/:id/:note_id/history',
+      path: '/detail/:id/:note_id/history',
+      component: NoteHistoryPage,
       meta: {
         requiresAuth: true
       }

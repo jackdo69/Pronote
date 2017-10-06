@@ -42,6 +42,7 @@ export default {
       })
     },
     update() {
+      
       journalRepository.update(this.journal, (err) => {
         this.dismissModal()
       })

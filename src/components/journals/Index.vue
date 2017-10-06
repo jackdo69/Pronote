@@ -12,9 +12,6 @@ import JournalRepository from '../../data/JournalRepository'
 import EventBus from '../../components/EventBus'
 import journal from './Journal'
 import moment from 'moment'
-// import date from 'index.js'
-//
-// Vue.use(date)
 
 export default {
   components: {
@@ -40,29 +37,22 @@ export default {
           var createdCheck = moment(journal.created).format('YYYY-MM-DD');
           startDate = moment(this.dateRange[0]).format('YYYY-MM-DD');
           endDate = moment(this.dateRange[1]).format('YYYY-MM-DD');
+          console.log("createdCheck:" + createdCheck);
           if ((createdCheck > startDate) && (createdCheck < endDate)) {
             journal_created = moment(journal.created).format('MM/DD/YYYY');
           }
-          var start = Date.parse(startDate)
-          var end = Date.parse(endDate)
-          var check = Date.parse(createdCheck)
-          console.log(start)
-          console.log(end)
-          console.log(check)
-
+          console.log("startDate:" + startDate);
+          console.log("journal_created:" + journal_created);
+          console.log("endDate:" + endDate);
         }
         if (this.searchQuery) {
           if (journal_created)
-            return (journal.title.toLowerCase().indexOf(
-              this.searchQuery.toLowerCase()) !== -1 && journal.created.replace(/\s+/g, '').indexOf(journal_created) !== -1)
+            return (journal.title.toLowerCase().indexOf(this.searchQuery.toLowerCase()) !== -1 && journal.created.indexOf(journal_created) !== -1)
           else
-            return (journal.title.toLowerCase().indexOf(
-              this.searchQuery.toLowerCase()) !== -1)
+            return (journal.title.toLowerCase().indexOf(this.searchQuery.toLowerCase()) !== -1)
         } else {
           if (startDate && endDate) {
-            // return (journal.created.indexOf(journal_created) !== -1);
-            return (start <= check && check <= end);
-            // return date(startDate | date endDate);
+            return (journal.created.indexOf(journal_created) !== -1);
           }
         }
         return true
@@ -74,21 +64,9 @@ export default {
   created() {
     console.log("created journal");
   },
-  updated() {
-    JournalRepository.on('changed', ({
-      key,
-      title,
-      created
-    }) => {
-      console.log("changed");
-      const outdatedjournal = JournalRepository.find(this.journals, key)
-      outdatedjournal.title = title
-      outdatedjournal.created = this.created
-    })
-  },
   mounted() {
     JournalRepository.on('added', (journal) => {
-      // console.log("added");
+      console.log("added");
       this.journals.unshift(journal)
     })
     JournalRepository.on('changed', ({
@@ -109,8 +87,8 @@ export default {
       this.journals.splice(journalToRemove, 1)
     })
     EventBus.$on('search', (searchQuery, dateRange) => {
-      // console.log("searchQuery:" + searchQuery);
-      // console.log("dateRange:" + dateRange);
+      console.log("searchQuery:" + searchQuery);
+      console.log("dateRange:" + dateRange);
       this.searchQuery = searchQuery;
       this.dateRange = dateRange;
     })
@@ -175,9 +153,9 @@ form.create-journal button {
 }
 
 .journal h2 {
-  //// * *
-  *font-size: 1.1em;
-  */ */ margin-bottom: 8px;
+
+  font-size: 1.1em;
+  margin-bottom: 8px;
 }
 
 .journal pre {

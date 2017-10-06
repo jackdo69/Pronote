@@ -5,9 +5,11 @@
       <input name="title" v-model="note.title" placeholder="Title" />
       <textarea name="content" v-model="note.content" placeholder="Text goes here..." rows="8">
         </textarea>
-      <input name="version" v-model="note.version" type="hidden" />
-      <input name="created" v-model="created" type="hidden" />
-      <button type="button" v-on:click="remove">
+
+       
+       
+        <button type="button" v-on:click="remove">
+
           <i class="fa fa-trash-o" aria-hidden="true"></i>
         </button>
       <button type="submit">Done</button>
@@ -20,57 +22,48 @@ import Vue from 'vue'
 import noteRepository from '../../data/NoteRepository'
 import EventBus from '../../components/EventBus'
 import moment from 'moment'
-export default {
-  data() {
-    return {
-      note: null,
-      created: moment().format('MM/DD/YYYY hh:mm')
-    }
-  },
-  created() {
-    EventBus.$on('note.selected', (note) => {
-      this.note = Vue.util.extend({}, note)
-    })
-  },
-  beforeDestroy() {
-    EventBus.$off('note.selected')
-  },
 
-  methods: {
-    remove() {
-      noteRepository.remove(this.note, (err) => {
-        alert('error occur')
-        this.dismissModal()
+
+  export default {
+    data () {
+      return {
+        note: null,
+        
+      }
+    },
+    created () {
+      
+      EventBus.$on('note.selected', (note) => {
+        this.note = Vue.util.extend({}, note)
+        
+
       })
     },
-    update() {
-      var notesRef = noteRepository.getNotesRef();
-      notesRef.child(this.note.key).once('value')
-        .then((snapshot) => {
-          var oldnote = snapshot.val();
-          oldnote.key = this.note.key;
-          oldnote.active = false;
-          noteRepository.update(oldnote, (err) => {
-          })
-          noteRepository.create({
-            title: this.note.title,
-            content: this.note.content,
-            created: this.created,
-            hide: this.hide,
-            active: this.note.active,
-            version: oldnote.version + 1
-          }, (err) => {
-            this.dismissModal()
-          })
-        });
+    methods: {
+      update() {
+        
+        var notesRef = noteRepository.getNotesRef();
+
+        
+        notesRef.child(this.note.key).once('value')
+          .then((snapshot) => {
+            var oldnote = snapshot.val();
+            oldnote = this.note;
+            oldnote.key = this.note.key;
+            oldnote.active = false;
+             
+            noteRepository.update(this.note, (err) => { this.dismissModal() })
+           
+          });
 
 
-    },
-    dismissModal() {
-      this.note = null
+      },
+      dismissModal() {
+        this.note = null
+      }
     }
   }
-}
+
 </script>
 <style>
 .backdrop {

@@ -9,8 +9,11 @@
   <div class="notes" ref="notes">
     <note v-for="note in filteredNotes" v-show="show_hidden==true" v-if="note.hide ==true" :note="note">
     </note>
+
   </div>
-</div>
+
+  <!--{{filteredNotes}}-->
+  </div>
 </template>
 <script>
 import noteRepository from '../../data/NoteRepository'
@@ -62,12 +65,14 @@ export default {
           console.log("endDate:" + endDate);
         }
         if (this.searchQuery) {
+          
           if (note_created)
-            return (note.title.toLowerCase().indexOf(
-              this.searchQuery.toLowerCase()) !== -1 || note.content.toLowerCase().indexOf(this.searchQuery.toLowerCase()) !== -1 || note.created.indexOf(note_created) !== -1)
+          {
+            //alert(note.title.toLowerCase())
+            return (note.title.toLowerCase().indexOf(this.searchQuery.toLowerCase()) !== -1 || note.content.toLowerCase().indexOf(this.searchQuery.toLowerCase()) !== -1 || note.created.indexOf(note_created) !== -1)
+          }
           else
-            return (note.title.toLowerCase().indexOf(
-              this.searchQuery.toLowerCase()) !== -1 || note.content.toLowerCase().indexOf(this.searchQuery.toLowerCase()) !== -1)
+            return (note.title.toLowerCase().indexOf(this.searchQuery.toLowerCase()) !== -1 || note.content.toLowerCase().indexOf(this.searchQuery.toLowerCase()) !== -1)
         } else {
           if (startDate && endDate) {
             return (note.created.indexOf(note_created) !== -1);
@@ -86,6 +91,7 @@ export default {
     })
 
     noteRepository.on('added', (note) => {
+     // alert("OK")
       console.log("note added");
       this.notes.unshift(note)
     })
@@ -106,6 +112,7 @@ export default {
     })
     //Auto update any change done to the note
     noteRepository.on('removed', ({
+      
       key
     }) => {
       let noteToRemove = noteRepository.findIndex(this.notes, key)

@@ -3,7 +3,11 @@
   <h2 class="text-primary"><i class="fa fa-sticky-note" aria-hidden="true">&nbsp;{{note.title}}</i></h2>
   <div class="text-right text-default">{{note.created}}</div>
   <pre>{{note.content}}</pre>
-  <div class="text-left text-default">Version: {{note.version}}</div>
+  
+  <div class="text-default">Version: {{note.version}}
+    <a id="lb_history" href="javascript:;" @click="viewHistory(note)">View History</a>
+  </div>
+  
   <button type="button" v-on:click.stop="moveArchive">
       <i class="fa fa-archive text-danger" aria-hidden="true"></i>
     </button>
@@ -26,6 +30,18 @@ import EventBus from '../EventBus'
 export default {
   props: ['note'],
   methods: {
+    viewHistory: function(note) {
+      
+      var path = window.location.pathname.split('/detail/')
+      //alert("key "+ path[1])
+      this.$router.push({
+        name: '/detail/:id/:note_id/history',
+        params: {
+          id: path[1],
+          note_id: note.key
+        }
+      })
+    },
     moveArchive() {
       archivedNoteRepository.create(this.note, (err) => {
         alert('error occur')
@@ -36,6 +52,7 @@ export default {
       })
     },
     updateModal() {
+      
       console.log("updateModal");
       console.log(this.note);
       EventBus.$emit('note.selected', this.note)
@@ -47,9 +64,10 @@ export default {
       notesRef.child(this.note.key).once('value')
         .then((snapshot) => {
           var oldnote = snapshot.val();
+          oldnote = this.note;
           oldnote.key = this.note.key;
           oldnote.hide = true;
-          noteRepository.update(oldnote, (err) => {})
+          noteRepository.updateParent(this.note, (err) => {})
         });
     },
 
@@ -59,9 +77,10 @@ export default {
       notesRef.child(this.note.key).once('value')
         .then((snapshot) => {
           var oldnote = snapshot.val();
+          oldnote = this.note;
           oldnote.key = this.note.key;
           oldnote.hide = false;
-          noteRepository.update(oldnote, (err) => {})
+          noteRepository.updateParent(this.note, (err) => {})
         });
     }
   }
@@ -69,6 +88,9 @@ export default {
 </script>
 
 <style>
+#lb_history{
+  float:right;
+}
 .note {
   background: #fff;
   border-radius: 3px;
