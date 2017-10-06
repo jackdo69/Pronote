@@ -3,28 +3,16 @@
   <button type="button" class="btn btn-danger" v-show="show_hidden==false" v-on:click="show_hidden=true">Show hidden entries</button>
   <button type="button" class="btn btn-success" v-show="show_hidden==true" v-on:click="show_hidden=false">Show unhidden entries</button>
   <div class="notes" ref="notes">
-<<<<<<< HEAD
     <note v-for="note in filteredNotes" v-show="show_hidden==false" v-if="note.hide != true" :note="note">
     </note>
   </div>
   <div class="notes" ref="notes">
     <note v-for="note in filteredNotes" v-show="show_hidden==true" v-if="note.hide ==true" :note="note">
-=======
-
-
-    <note v-for="note in filteredNotes"
-          :note="note">
-
->>>>>>> a775eefbd9c7e8e5300a96725a3a671ffe9d9415
     </note>
-
   </div>
-
-  <!--{{filteredNotes}}-->
-  </div>
+</div>
 </template>
 <script>
-<<<<<<< HEAD
 import noteRepository from '../../data/NoteRepository'
 import Masonry from 'masonry-layout'
 import EventBus from '../../components/EventBus'
@@ -49,41 +37,6 @@ export default {
         this.$nextTick(() => {
           this.masonry.reloadItems()
           this.masonry.layout()
-=======
-  import noteRepository from '../../data/NoteRepository'
-  import Masonry from 'masonry-layout'
-  import EventBus from '../../components/EventBus'
-  import Note from './Note'
-
-  export default {
-    components: {
-      Note
-    },
-    data () {
-      return {
-        notes: [],
-        searchQuery: ''
-      }
-    },
-    watch: {
-      'filteredNotes': {
-        handler () {
-          this.$nextTick(() => {
-            this.masonry.reloadItems()
-            this.masonry.layout()
-          })
-        }
-      },
-      deep: true
-    },
-    computed: {
-      filteredNotes () {
-        return this.notes.filter((note) => {
-
-          if (this.searchQuery) return (note.title.indexOf(this.searchQuery) !== -1 || note.content.indexOf(this.searchQuery) !== -1) // returns truthy if query is found in title or content
-          return true
-
->>>>>>> a775eefbd9c7e8e5300a96725a3a671ffe9d9415
         })
       }
     },
@@ -110,9 +63,11 @@ export default {
         }
         if (this.searchQuery) {
           if (note_created)
-            return (note.title.toLowerCase().indexOf(this.searchQuery.toLowerCase()) !== -1 || note.content.toLowerCase().indexOf(this.searchQuery.toLowerCase()) !== -1 || note.created.indexOf(note_created) !== -1)
+            return (note.title.toLowerCase().indexOf(
+              this.searchQuery.toLowerCase()) !== -1 || note.content.toLowerCase().indexOf(this.searchQuery.toLowerCase()) !== -1 || note.created.indexOf(note_created) !== -1)
           else
-            return (note.title.toLowerCase().indexOf(this.searchQuery.toLowerCase()) !== -1 || note.content.toLowerCase().indexOf(this.searchQuery.toLowerCase()) !== -1)
+            return (note.title.toLowerCase().indexOf(
+              this.searchQuery.toLowerCase()) !== -1 || note.content.toLowerCase().indexOf(this.searchQuery.toLowerCase()) !== -1)
         } else {
           if (startDate && endDate) {
             return (note.created.indexOf(note_created) !== -1);
