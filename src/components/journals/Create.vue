@@ -24,7 +24,6 @@ export default {
           title: this.title,
           created: this.created
         }, (err) => {
-          alert('woops some errors occur')
           this.title = '';
           this.created = moment().format('MM/DD/YYYY hh:mm');
           alert('Journal created successfully')

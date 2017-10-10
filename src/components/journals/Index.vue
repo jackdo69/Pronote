@@ -12,7 +12,8 @@ import JournalRepository from '../../data/JournalRepository'
 import EventBus from '../../components/EventBus'
 import journal from './Journal'
 import moment from 'moment'
-
+	import Masonry from 'masonry-layout'
+	
 export default {
   components: {
     journal
@@ -25,6 +26,17 @@ export default {
       title: '',
       created: moment().format('MM/DD/YYYY hh:mm')
     }
+  },
+  watch: {
+    'journals': {
+      handler() {
+        this.$nextTick(() => {
+          this.masonry.reloadItems()
+          this.masonry.layout()
+        })
+      }
+    },
+    deep: true
   },
   computed: {
     filteredjournals() {
@@ -41,9 +53,9 @@ export default {
           if ((createdCheck > startDate) && (createdCheck < endDate)) {
             journal_created = moment(journal.created).format('MM/DD/YYYY');
           }
-          console.log("startDate:" + startDate);
-          console.log("journal_created:" + journal_created);
-          console.log("endDate:" + endDate);
+          var start = Date.parse(startDate)
+          var end = Date.parse(endDate)
+          var check = Date.parse(createdCheck)
         }
         if (this.searchQuery) {
           if (journal_created)
@@ -52,7 +64,8 @@ export default {
             return (journal.title.toLowerCase().indexOf(this.searchQuery.toLowerCase()) !== -1)
         } else {
           if (startDate && endDate) {
-            return (journal.created.indexOf(journal_created) !== -1);
+            // return (journal.created.indexOf(journal_created) !== -1);
+            return (start <=check && check <= end);
           }
         }
         return true
@@ -65,6 +78,12 @@ export default {
     console.log("created journal");
   },
   mounted() {
+  this.masonry = new Masonry(this.$refs.journals, {
+	      itemSelector: '.note',
+	      columnWidth: 320,
+	      gutter: 16,
+	      fitWidth: false
+	    })
     JournalRepository.on('added', (journal) => {
       console.log("added");
       this.journals.unshift(journal)

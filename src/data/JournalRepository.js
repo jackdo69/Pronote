@@ -20,6 +20,9 @@ class JournalRepository extends EventEmitter {
     return Firebase.database().ref('users/' + this.uid + '/journals')
   }
 
+  getJournalsRef(){
+      return this.journalsRef;
+  }
 
   create({
     title = '',

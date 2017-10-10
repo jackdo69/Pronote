@@ -1,15 +1,10 @@
 <template>
 <div class="container">
-  <button type="button" class="btn btn-danger" v-show="show_hidden==false" v-on:click="show_hidden=true">Show hidden entries</button>
-  <button type="button" class="btn btn-success" v-show="show_hidden==true" v-on:click="show_hidden=false">Show unhidden entries</button>
+  <button type="button" class="btn btn-danger" v-show="show_hidden==false" v-on:click="showhidden()">Show hidden entries</button>
+  <button type="button" class="btn btn-success" v-show="show_hidden==true" v-on:click="showhidden()">Show unhidden entries</button>
   <div class="notes" ref="notes">
-    <note v-for="note in filteredNotes" v-show="show_hidden==false" v-if="note.hide != true" :note="note">
+    <note v-for="note in filteredNotes" :note="note">
     </note>
-  </div>
-  <div class="notes" ref="notes">
-    <note v-for="note in filteredNotes" v-show="show_hidden==true" v-if="note.hide ==true" :note="note">
-    </note>
-
   </div>
 
   <!--{{filteredNotes}}-->
@@ -28,6 +23,7 @@ export default {
   data() {
     return {
       notes: [],
+      notesTemp: [],
       show_hidden: false,
       searchQuery: '',
       dateRange: '',
@@ -45,7 +41,21 @@ export default {
     },
     deep: true
   },
+  methods: {
+	  showhidden() {
+		  console.log("showhidden");
+		  this.notes = this.notesTemp;
+		  console.log(this.notes);
+		  this.show_hidden =  !this.show_hidden;
+		  this.notes = this.notes.filter((note) => {
+				  console.log("filter showhidden");
+				  console.log(note.hide);
+				  return (note.hide == this.show_hidden)
+			  })
+	  }
+  },
   computed: {
+
     filteredNotes() {
       var note_created = '';
       return this.notes.filter((note) => {
@@ -60,12 +70,12 @@ export default {
           if ((createdCheck > startDate) && (createdCheck < endDate)) {
             note_created = moment(note.created).format('MM/DD/YYYY');
           }
-          console.log("startDate:" + startDate);
-          console.log("note_created:" + note_created);
-          console.log("endDate:" + endDate);
+          var start = Date.parse(startDate)
+          var end = Date.parse(endDate)
+          var check = Date.parse(createdCheck)
         }
         if (this.searchQuery) {
-          
+
           if (note_created)
           {
             //alert(note.title.toLowerCase())
@@ -75,10 +85,11 @@ export default {
             return (note.title.toLowerCase().indexOf(this.searchQuery.toLowerCase()) !== -1 || note.content.toLowerCase().indexOf(this.searchQuery.toLowerCase()) !== -1)
         } else {
           if (startDate && endDate) {
-            return (note.created.indexOf(note_created) !== -1);
+            // return (journal.created.indexOf(journal_created) !== -1);
+            return (start <=check && check <= end);
           }
         }
-        return true
+        return (note.hide == this.show_hidden);//return true
       })
     }
   },
@@ -92,6 +103,7 @@ export default {
 
     noteRepository.on('added', (note) => {
      // alert("OK")
+      this.notesTemp.unshift(note);
       console.log("note added");
       this.notes.unshift(note)
     })
@@ -100,19 +112,20 @@ export default {
       key,
       title,
       content,
+      hide,
       created
     }) => {
       console.log("note changed");
       let outdatedNote = noteRepository.find(this.notes, key)
       outdatedNote.title = title
       outdatedNote.content = content
+      outdatedNote.hide = hide
       outdatedNote.created = moment().format('MM/DD/YYYY hh:mm')
       console.log("remove old note");
-      this.notes.splice(outdatedNote, 1)
     })
     //Auto update any change done to the note
     noteRepository.on('removed', ({
-      
+
       key
     }) => {
       let noteToRemove = noteRepository.findIndex(this.notes, key)

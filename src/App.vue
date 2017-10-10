@@ -17,7 +17,9 @@ export default {
     UpdateModal,
     HeaderBar
   },
-  data () {}
+  data () {
+	  return {
+  }}
 }
 </script>
 
