@@ -3,6 +3,7 @@ import App from './App'
 import Auth from './data/Auth'
 import VueRouter from 'vue-router'
 import VueFire from 'vuefire'
+import VeeValidate from 'vee-validate';
 import AuthPage from './components/pages/Auth'
 import JournalsPage from './components/pages/Journals'
 import JournalDetailsPage from './components/pages/JournalDetails'
@@ -11,6 +12,7 @@ import ArchivedPage from './components/pages/ArchivedPage'
 import * as firebase from "firebase";
 Vue.use(VueRouter)
 Vue.use(VueFire)
+Vue.use(VeeValidate)
 const router = new VueRouter({
   mode: 'history',
   routes: [{

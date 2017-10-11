@@ -5,15 +5,23 @@
       <h1>{{wantsToSignUp ? 'Sign up' : 'Sign in'}}</h1>
       <div class="form-group">
         <label for="email">Email</label>
-        <input class="form-control" type="email" name="email" id="email" placeholder="Email" required v-model="email">
+        <!-- <input class="form-control" type="email" name="email" id="email" required placeholder="Email" v-model="email"> -->
+        <input class="form-control" v-validate="'required|email'" :class="{'input': true, 'is-danger': errors.has('email') }" name="email" type="text" placeholder="Email" v-model="email">
+        <span v-show="errors.has('email')" class="help is-danger">{{ errors.first('email') }}</span>
       </div>
       <div class="form-group">
         <label for="password">Password</label>
-        <input class="form-control" type="password" name="password" id="password" required v-model="password">
+        <!-- <input class="form-control" type="password" name="password" id="password" required v-model="password"> -->
+        <input class="form-control" name="password" v-validate="'required|min:6'"  :class="{'input': true, 'is-danger': errors.has('password') }" type="password" placeholder="Password" v-model="password">
+                <i v-show="errors.has('password')" class="fa fa-warning"></i>
+                <span v-show="errors.has('password')" class="help is-danger">{{ errors.first('password') }}</span>
       </div>
       <div v-show="wantsToSignUp" class="form-group">
         <label for="confirm-password">Confirm Password</label>
-        <input class="form-control" type="password" name="confirm-password" id="confirm-password" v-model="confirmPassword">
+        <!-- <input class="form-control" type="password" name="confirm-password" id="confirm-password" v-model="confirmPassword"> -->
+        <input class="form-control" name="confirm-password" v-validate="'required|min:6'"  :class="{'input': true, 'is-danger': errors.has('password') }" type="password" placeholder="Password" v-model="confirmPassword">
+                <i v-show="errors.has('password')" class="fa fa-warning"></i>
+                <span v-show="errors.has('password')" class="help is-danger">{{ errors.first('password') }}</span>
       </div>
       <div v-show="!wantsToSignUp" class="form-group text-center">
         <button type="submit" class="btn btn-success btn-block">Log in</button>
@@ -49,6 +57,8 @@ export default {
             password: this.password
           })
           .then((userData) => this.loginWithPassword())
+      } else {
+        alert ('Password not match')
       }
     },
     loginWithPassword() {

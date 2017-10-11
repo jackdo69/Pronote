@@ -72,7 +72,7 @@ export default {
       }
       this.user = {
         userTitle: authed.providerData[0].displayName || authed.providerData[0].email || '',
-        imageUrl: authed.providerData[0].photoURL || 'https://ae01.alicdn.com/kf/HTB1Q2xDMXXXXXagapXXq6xXFXXXp/Free-shipping-One-Piece-font-b-Luffy-b-font-font-b-Cosplay-b-font-Costume.jpg'
+        imageUrl: authed.providerData[0].photoURL || 'https://firebase.google.com/_static/images/firebase/touchicon-180.png'
       }
     },
     signOut() {
