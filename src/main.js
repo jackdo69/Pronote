@@ -9,6 +9,9 @@ import JournalsPage from './components/pages/Journals'
 import JournalDetailsPage from './components/pages/JournalDetails'
 import NoteHistoryPage from './components/notes/NoteHistory'
 import ArchivedPage from './components/pages/ArchivedPage'
+import UserManual from './components/pages/UserManual'
+
+
 import * as firebase from "firebase";
 Vue.use(VueRouter)
 Vue.use(VueFire)
@@ -60,6 +63,15 @@ const router = new VueRouter({
         requiresAuth: true
       }
     },
+    {
+        name: 'userManual',
+        path: '/userManual',
+        component: UserManual,
+        meta: {
+          requiresAuth: true
+        }
+      },
+    
   ]
 })
 

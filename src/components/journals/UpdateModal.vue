@@ -4,6 +4,7 @@
     <form class="edit-journal" v-on:submit.prevent="update">
       <input name="title" v-model="journal.title" placeholder="Title" />
       <input name="created" v-model="created" type="hidden" />
+      <input name="title" v-model="journal.description" placeholder="Description" />
       <button type="button" v-on:click="remove">
           <i class="fa fa-trash-o" aria-hidden="true"></i>
         </button>
@@ -42,7 +43,7 @@ export default {
       })
     },
     update() {
-      
+
       journalRepository.update(this.journal, (err) => {
         this.dismissModal()
       })

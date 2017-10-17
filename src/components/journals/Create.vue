@@ -1,6 +1,8 @@
 <template>
   <form class="create-journal" v-on:submit.prevent="createjournal()">
     <input name="title" v-model="title" placeholder="Journal Name" />
+    <textarea name="description" v-model="description" placeholder="Short description..." rows="2">
+</textarea>
     <button type="submit">+</button>
   </form>
 </template>
@@ -13,19 +15,22 @@ export default {
   data() {
     return {
       title: '',
+      description:'',
       created: moment().format('MM/DD/YYYY hh:mm')
     }
   },
   methods: {
     createjournal() {
       console.log("createjournal");
-      if (this.title.trim()) {
+      if (this.title.trim()|| this.description.trim()) {
         JournalRepository.create({
           title: this.title,
+          description: this.description,
           created: this.created
         }, (err) => {
           // alert('woops some errors occur')
           this.title = '';
+          this.description = '';
           this.created = moment().format('MM/DD/YYYY hh:mm');
           alert('Journal created successfully')
         })

@@ -14,7 +14,12 @@ export default {
     return this.ref.signInWithEmailAndPassword(credentials.email, credentials.password)
   },
   signUpWithPassword(credentials) {
-    return this.ref.createUserWithEmailAndPassword(credentials.email, credentials.password)
+	  return this.ref.createUserWithEmailAndPassword(credentials.email, credentials.password);
+  },
+  userInfo(credentials) {
+	  var userRef = Firebase.database().ref(`users`);
+	  var uid = Firebase.auth().currentUser.uid;
+	  userRef.child(uid).set(credentials);
   },
   signOut() {
     this.ref.signOut()

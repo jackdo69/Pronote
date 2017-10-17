@@ -7,6 +7,7 @@
     <div class="col-sm-4"><img src="../../assets/note.png" class="img-responsive" /></div>
     <div class="col-sm-8 no-padding">
       <pre>Created: {{journal.created}}</pre>
+      <pre>Description:{{journal.description}}</pre>
       <!-- <button type="button" v-on:click.stop="remove(journal)">
 		      <i class="fa fa-trash-o text-danger" aria-hidden="true"></i>
 		    </button> -->

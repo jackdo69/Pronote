@@ -10,14 +10,14 @@
     </textarea>
     <button type="submit">+</button>
   </form>
- </div> 
+ </div>
 </template>
 <script>
   import noteRepository from '../../data/NoteRepository';
   import journalRepository from '../../data/JournalRepository';
   import moment from 'moment'
   import EventBus from '../../components/EventBus'
-  
+
   export default {
     data () {
       return {
@@ -45,11 +45,11 @@
       createNote () {
         if (this.title.trim() || this.content.trim()) {
           noteRepository.create({
-        	  title: this.title, 
-        	  content: this.content, 
-        	  created: this.created, 
-        	  active: this.active, 
-        	  version: this.version 
+        	  title: this.title,
+        	  content: this.content,
+        	  created: this.created,
+        	  active: this.active,
+        	  version: this.version
           }, (err) => {
             if (err) {
               return EventBus.$emit('alert', {type: 'error', message: err.message})
