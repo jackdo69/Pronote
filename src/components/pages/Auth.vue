@@ -3,12 +3,12 @@
 	<div class="card auth-form mx-auto mt-5">
 		<form v-on:submit.prevent="wantsToSignUp ? signUpWithPassword() : loginWithPassword()">
 			<div id="logoauth">
-				<img src="../../assets/ProNote_logo.png" />
+				<img src="../../assets/Pen_logo.png" />
 			</div>
 			<div>
-					<h2 class="text-center">Welcome back to Pronote!!</h2>
+					<h1 class="text-center">Welcome to Pronote!</h1>
 			</div>
-			<h1>{{wantsToSignUp ? 'Sign up' : 'Sign in'}}</h1>
+			<h2 class="text-center">{{wantsToSignUp ? 'Sign Up Below' : 'Sign In Below'}}</h2>
 			<div v-show="wantsToSignUp" class="form-group">
 				<label for="confirm-password">Username</label> <input class="form-control" name="username" v-validate="'required|min:3'" :class="{'input': true, 'is-danger': errors.has('username') }" type="text"
 					placeholder="Username" v-model="username"> <i v-show="errors.has('username')" class="fa fa-warning"></i> <span v-show="errors.has('username')" class="help is-danger">{{
@@ -119,7 +119,20 @@
 	}
 </script>
 <style>
+
+h1{
+	font-family: Arial,Helvetica,sans-serif;
+
+}
+
+h2{
+	font-family: Arial,Helvetica,sans-serif;
+
+}
+
 #logoauth img {
+	display: block;
+	margin: auto;
 	height: 184px;
 }
 .auth-form {

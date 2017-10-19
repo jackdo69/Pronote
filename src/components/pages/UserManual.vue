@@ -1,7 +1,7 @@
 <template>
 <div class="container" id="printarea">
 	<div class="container">
-		<h1>Pronote Guide Sheet</h1>
+		<h1 class="text-center">Pronote Help</h1>
 		<hr />
 		<div class="row">
 			<div class="col-md-6">
@@ -19,6 +19,9 @@
 						</h3>
 						<h3 class="card-text">
 							<i aria-hidden="true" class="fa fa-pencil text-primary"> Edit Journal/Entry</i>
+						</h3>
+						<h3 class="card-text">
+							For more information, please visit our forum at <a href="http://pronote.freeforums.net/">pronote forum!</a>
 						</h3>
 					</div>
 				</div>

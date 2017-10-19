@@ -1,12 +1,13 @@
 <template>
 <div class="container">
-	<h3 class="text-center">Journal: <span class="text-danger">{{journal_title}}</span></h3>
+  <h3 class="text-center">Journal: <span class="text-danger">{{journal_title}}</span></h3>
+  <h4 class="text-center">Create a journal entry</h4>
   <form class="create-note" v-on:submit.prevent="createNote()">
-    <input name="title" v-model="title" placeholder="Title"/>
+    <input name="title" v-model="title" v-validate="'required|min:1'" placeholder="Enter entry title."/>
 	<input name="created" v-model="created" type="hidden"/>
 	<input name="version" v-model="version" type="hidden"/>
 	<input name="created" v-model="created" type="hidden"/>
-    <textarea name="content" v-model="content" placeholder="Text goes here..." rows="3">
+    <textarea name="content" v-model="content" placeholder="Enter content here." rows="3">
     </textarea>
     <button type="submit">+</button>
   </form>
@@ -43,13 +44,15 @@
 	},
     methods: {
       createNote () {
-        if (this.title.trim() || this.content.trim()) {
+        if (this.title.length < 1) {
+          alert('Please enter entry title')
+        } else if (this.title.trim() || this.content.trim()) {
           noteRepository.create({
-        	  title: this.title,
-        	  content: this.content,
-        	  created: this.created,
-        	  active: this.active,
-        	  version: this.version
+            title: this.title,
+            content: this.content,
+            created: this.created,
+            active: this.active,
+            version: this.version
           }, (err) => {
             if (err) {
               return EventBus.$emit('alert', {type: 'error', message: err.message})
@@ -62,6 +65,25 @@
             EventBus.$emit('alert', {type: 'success', message: 'Note was successfully created'})
           })
         }
+        // if (this.title.trim() || this.content.trim()) {
+        //   noteRepository.create({
+        // 	  title: this.title,
+        // 	  content: this.content,
+        // 	  created: this.created,
+        // 	  active: this.active,
+        // 	  version: this.version
+        //   }, (err) => {
+        //     if (err) {
+        //       return EventBus.$emit('alert', {type: 'error', message: err.message})
+        //     }
+        //     this.title = '';
+        //     this.content = '';
+        //     this.created =  moment().format('MM/DD/YYYY hh:mm');
+        //     this.active = true;
+        //     this.version= 1;
+        //     EventBus.$emit('alert', {type: 'success', message: 'Note was successfully created'})
+        //   })
+        // }
       }
     }
   }
@@ -71,7 +93,7 @@
   form.create-note{
     position: relative;
     width: 480px;
-    margin: 75px auto 15px auto;
+    margin: 25px auto 15px auto;
     background: #fff;
     padding: 15px;
     border-radius: 2px;
@@ -97,5 +119,9 @@
     box-shadow: 0 1px 3px rgba(0,0,0,0.3);
     cursor: pointer;
     outline: none;
+  }
+
+  p {
+    font-family: Arial,Helvetica,sans-serif;
   }
 </style>

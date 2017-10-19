@@ -1,7 +1,9 @@
 <template>
   <form class="create-journal" v-on:submit.prevent="createjournal()">
-    <input name="title" v-model="title" placeholder="Journal Name" />
-    <textarea name="description" v-model="description" placeholder="Short description..." rows="2">
+    <!-- <input name="title" v-model="title" v-validate="'required|min:1'" placeholder="Enter a journal name." /> -->
+    <input name="title" v-validate="'required|min:1'"
+    :class="{'input': true, 'is-danger': errors.has('title') }"  placeholder="Enter a journal name." v-model="title">
+    <textarea name="description" v-model="description" placeholder="Enter a short description." rows="2">
 </textarea>
     <button type="submit">+</button>
   </form>
@@ -10,6 +12,8 @@
 import JournalRepository from '../../data/JournalRepository'
 import EventBus from '../../components/EventBus'
 import moment from 'moment'
+import VeeValidate from 'vee-validate';
+
 
 export default {
   data() {
@@ -22,7 +26,9 @@ export default {
   methods: {
     createjournal() {
       console.log("createjournal");
-      if (this.title.trim()|| this.description.trim()) {
+      if (this.title.length < 1) {
+        alert('Please enter the Journal title')
+      } else if (this.title.trim()|| this.description.trim()) {
         JournalRepository.create({
           title: this.title,
           description: this.description,
@@ -35,6 +41,19 @@ export default {
           alert('Journal created successfully')
         })
       }
+      // if (this.title.trim()|| this.description.trim()) {
+      //   JournalRepository.create({
+      //     title: this.title,
+      //     description: this.description,
+      //     created: this.created
+      //   }, (err) => {
+      //     // alert('woops some errors occur')
+      //     this.title = '';
+      //     this.description = '';
+      //     this.created = moment().format('MM/DD/YYYY hh:mm');
+      //     alert('Journal created successfully')
+      //   })
+      // }
     }
   }
 }
@@ -44,7 +63,7 @@ export default {
 form.create-journal {
   position: relative;
   width: 480px;
-  margin: 75px auto 15px auto;
+  margin: 25px auto 15px auto;
   background: #fff;
   padding: 15px;
   border-radius: 2px;

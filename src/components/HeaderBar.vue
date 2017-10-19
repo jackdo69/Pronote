@@ -1,14 +1,17 @@
 <template>
-<div v-if="user">
+<div v-if="user" class="font">
 	<nav class="navbar navbar-inverse">
 		<div class="container">
 			<div class="row">
 				<div class="navbar-header">
 					<div id="logo">
-						<img src="../assets/ProNote_logo.png" />
+						<img src="../assets/Pen_logo.png" />
+
 					</div>
+
 				</div>
 				<ul class="nav navbar-nav navbar-left">
+					<li class="active"><router-link to="/home" class="nav"> <a style="color: #fff;">Pronote</a> </router-link></li>
 					<li class="active"><router-link to="/home" class="nav"> <a style="color: #fff;">Journals</a> </router-link></li>
 					<li class=""><router-link to="/archived" class="nav"> <a style="color: #fff;">Archived</a> </router-link></li>
 					<li class=""><router-link to="/userManual" class="nav"> <a style="color: #fff;">Help</a> </router-link></li>
@@ -113,6 +116,10 @@
 	height: 24px !important;
 }
 
+.font {
+	font-family: Arial,Helvetica,sans-serif;
+}
+
 .navbar a {
 	color: #fff;
 }
@@ -177,6 +184,7 @@ header a:focus, header a:hover {
 
 #logo img {
 	height: 50px;
+	color: #ffffff;
 }
 
 @media screen and (max-width: 1200px) {
